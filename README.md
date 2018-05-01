@@ -1,0 +1,1 @@
+# JS-Hide-Table-Rows
