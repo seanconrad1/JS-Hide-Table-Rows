@@ -1,0 +1,247 @@
+<!-- Author: Sean Conrad
+   Date:   4/30/2018
+   Description: Hide items in a table
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="test.js"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<center><body onLoad="checkAMER(self)" style="background-color:grey;">
+
+    Americas <input type='checkbox' id='AMERCheckbox' onclick='checkAMER(this)'/>
+    Asia Pacific <input type='checkbox' id='APACCheckbox' onclick='checkAPAC(this)'/>
+    Europe <input type='checkbox' id='EMEACheckbox' onclick='checkEMEA(this)'/>
+
+
+
+<div id="myTabDiv">
+    <table name="mytab" id="mytab1">
+        <tr name="data">
+            <td id="car" name="building_name">Washington</td>
+            <td>12</td>
+        </tr>
+        <tr name="data">
+            <td name="building_name">Maine</td>
+            <td>10</td>
+        </tr>
+        <tr name="data">
+            <td name="building_name">Florida</td>
+            <td>5</td>
+        </tr>
+        <tr name="data">
+            <td name="building_name">Hong Kong</td>
+            <td>15</td>
+        </tr>
+        <tr name="data">
+            <td name="building_name">California</td>
+            <td>15</td>
+        </tr>
+        <tr name="data">
+            <td name="building_name">London</td>
+            <td>15</td>
+        </tr>
+        <tr name="data">
+            <td name="building_name">Germany</td>
+            <td>15</td>
+        </tr>
+        <tr name="data">
+            <td name="building_name">Tokyo</td>
+            <td>15</td>
+        </tr>
+        <tr name="data">
+            <td name="building_name">Mumbai</td>
+            <td>10</td>
+        </tr>
+
+    </table>
+</div>
+
+
+<script>
+
+    //Create different regions
+    var AMER = ["Washington", "Maine", "Florida",
+        "California"]
+    var EMEA = ["London", "Germany"]
+    var APAC = ["Tokyo", "Hong Kong", "Mumbai"]
+    var DATA = []
+
+    //Get values from a table
+    function GetCellValues() {
+        var table = document.getElementById('mytab1');
+        for (var r = 0, n = table.rows.length; r < n; r++) {
+            for (var c = 0, m = table.rows[r].cells.length; c < m; c++) {
+                DATA.push(table.rows[r].cells[c].innerHTML)
+            }
+        }
+    }
+    GetCellValues()
+
+    //Find what values in the table
+    //go to which region
+    AMER_item_to_keep = (AMER.filter(function(n) {
+       return ((DATA.indexOf(n) !== -1))
+    }));
+
+    APAC_item_to_keep = (APAC.filter(function(n) {
+        return ((DATA.indexOf(n) !== -1))
+    }));
+
+    EMEA_item_to_keep = (EMEA.filter(function(n) {
+        return ((DATA.indexOf(n) !== -1))
+    }));
+
+
+    var elements = document.getElementsByName('data');
+    //Show APAC only rows
+    function checkAPAC(checkbox) {
+        var sites = []
+        if (checkbox.checked) {
+
+            //Show all elements
+            for (i of elements){
+                (i.style.display = '')
+            }
+
+            //Hide elements
+            document.getElementById("AMERCheckbox").checked = false;
+            document.getElementById("EMEACheckbox").checked = false;
+            for (var i of elements) {
+                sites.push(i.cells[0].innerHTML)
+            }
+
+            remove = (AMER_item_to_keep.filter(function (n) {
+                return ((sites.indexOf(n) !== -1))
+            }));
+
+            remove2 = (EMEA_item_to_keep.filter(function (n) {
+                return ((sites.indexOf(n) !== -1))
+            }));
+            for (i of remove2) {
+                remove.push(i)
+            }
+
+            for (i of elements){
+                if(remove.includes(i.cells[0].innerHTML)){
+                    i.style.display = 'none'
+                }
+            }   
+
+            //Show elements
+        } else {
+            for (var i of elements) {
+                {
+                    (i.style.display = '')
+                }
+            }
+        }
+    }
+
+    //Show EMEA only rows
+    function checkEMEA(checkbox) {
+        var sites = []
+        if (checkbox.checked) {
+
+            //Show all elements
+            for (var i of elements){
+                (i.style.display = '')
+            }
+
+            //Uncheck other boxes
+            document.getElementById("AMERCheckbox").checked = false;
+            document.getElementById("APACCheckbox").checked = false;
+            for (var i of elements) {
+                sites.push(i.cells[0].innerHTML)
+            }
+
+
+            remove = (AMER_item_to_keep.filter(function (n) {
+                return ((sites.indexOf(n) !== -1))
+            }));
+
+            remove2 = (APAC_item_to_keep.filter(function (n) {
+                return ((sites.indexOf(n) !== -1))
+            }));
+            for (i of remove2) {
+                remove.push(i)
+            }
+
+
+            for (i of elements){
+                if(remove.includes(i.cells[0].innerHTML)){
+                    i.style.display = 'none'
+                }
+            }   
+
+
+
+            //Show elements
+        } else {
+            for (var i of elements) {
+                {
+                    (i.style.display = '')
+                }
+            }
+        }
+    }
+
+
+        //Show AMER only rows
+        function checkAMER(checkbox) {
+            var sites = []
+            if (checkbox.checked) {
+
+                //Show all elements
+                for (i of elements){
+                    (i.style.display = '')
+                }
+
+                //Uncheck other boxes
+                document.getElementById("EMEACheckbox").checked = false;
+                document.getElementById("APACCheckbox").checked = false;
+                for (var i of elements) {
+                    sites.push(i.cells[0].innerHTML)
+                }
+
+                remove = (EMEA_item_to_keep.filter(function (n) {
+                    return ((sites.indexOf(n) !== -1))
+                }));
+
+                remove2 = (APAC_item_to_keep.filter(function (n) {
+                    return ((sites.indexOf(n) !== -1))
+                }));
+                for (i of remove2) {
+                    remove.push(i)
+                }
+
+                for (i of elements){
+                    if(remove.includes(i.cells[0].innerHTML)){
+                        i.style.display = 'none'
+                    }
+                }  
+
+                //Show elements
+            } else {
+                for (var i of elements) {
+                    {
+                        (i.style.display = '')
+                    }
+                }
+            }
+        }
+
+    //Assigning console.log to p
+    function p(value){
+        console.log(value);
+    }
+</script>
+
+
+
+</body></center>
+</html>
